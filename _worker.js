@@ -2341,7 +2341,8 @@ async function 生成随机IP(request, count = 16, 指定端口 = -1) {
 	};
 	const asn = request.cf.asn, isp = ISP配置[asn];
 	const cidr_url = isp ? `https://raw.githubusercontent.com/cmliu/cmliu/main/CF-CIDR/${isp.file}.txt` : 'https://raw.githubusercontent.com/cmliu/cmliu/main/CF-CIDR.txt';
-	const cfname = isp?.name || 'CF官方优选';
+	// const cfname = isp?.name || 'CF官方优选';
+	const cfname = isp?.name || 'GO';
 	const cfport = [443, 2053, 2083, 2087, 2096, 8443];
 	let cidrList = [];
 	try { const res = await fetch(cidr_url); cidrList = res.ok ? await 整理成数组(await res.text()) : ['104.16.0.0/13']; } catch { cidrList = ['104.16.0.0/13']; }
@@ -2356,7 +2357,9 @@ async function 生成随机IP(request, count = 16, 指定端口 = -1) {
 
 	const randomIPs = Array.from({ length: count }, () => {
 		const ip = generateRandomIPFromCIDR(cidrList[Math.floor(Math.random() * cidrList.length)]);
-		return `${ip}:${指定端口 === -1 ? cfport[Math.floor(Math.random() * cfport.length)] : 指定端口}#${cfname}`;
+		// return `${ip}:${指定端口 === -1 ? cfport[Math.floor(Math.random() * cfport.length)] : 指定端口}#${cfname}`;
+		const temp = `${ip}:${指定端口 === -1 ? cfport[Math.floor(Math.random() * cfport.length)] : 指定端口}`;
+		return `${temp}#${cfname}-${temp}`;
 	});
 	return [randomIPs, randomIPs.join('\n')];
 }
